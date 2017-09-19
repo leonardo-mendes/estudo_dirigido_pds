@@ -2,10 +2,20 @@ package br.com.leonardo.cursomc.domain;
 
 import java.io.Serializable;
 
-// Utilizamos o Serializable para conseguir utilizar a classe em trafego de dados.
-public class Categoria implements Serializable{
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+import org.hibernate.annotations.GeneratorType;
+
+
+@Entity //Notação que faz essa classe ser criada no dB através do JPA Obs: Lembrar de criar a dependencia do mesmo no pom.xml
+public class Categoria implements Serializable{ // Utilizamos o Serializable para conseguir utilizar a classe em trafego de dados.
 	private static final long serialVersionUID = 1L; // Sempre é criado quando implementamos a Serializable
 	
+	@Id //Essa notação indica que o campo abaixo "id" vai ser uma chave primária
+	@GeneratedValue(strategy=GenerationType.IDENTITY) //aqui definimos como vai funcionar a chave primária desta tabela
 	private Integer id;
 	private String nome;
 	
