@@ -28,6 +28,7 @@ public class CategoriaResource{
 		Categoria obj = service.buscar(id); // Aqui so estamos chamando uma função que ja declaramos no Service da classe
 		
 		return ResponseEntity.ok().body(obj);
+		// Aqui estamos falando que o retorno vai ser .ok() e vai trazer o body(Com o objeto dentro);
 	}
 	
 }
