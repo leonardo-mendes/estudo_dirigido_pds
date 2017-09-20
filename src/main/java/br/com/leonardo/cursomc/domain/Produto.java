@@ -12,6 +12,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity //Notação que faz essa classe ser criada no dB através do JPA Obs: Lembrar de criar a dependencia do mesmo no pom.xml
 public class Produto implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -22,6 +24,7 @@ public class Produto implements Serializable {
 	private String nome;
 	private Double preco;
 	
+	@JsonBackReference // Essa referencia fala que como ja colocamos a refrencia na outra classe essa so vai dizer que pertence a outra
 	@ManyToMany // Essa notação fala sobre a associação que ele ira utilizar com a classe da lista abaixo
 	@JoinTable(name="PRODUTO_CATEGORIA", // Vai ser o nome da Tabela
 		joinColumns = @JoinColumn (name="produto_id"), // Aqui chamamos o join do produto com o nome da coluna no banco e abaixo a parte do categoria, ja que é uma relação * para *

@@ -10,6 +10,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 
 @Entity //Notação que faz essa classe ser criada no dB através do JPA Obs: Lembrar de criar a dependencia do mesmo no pom.xml
 public class Categoria implements Serializable{ // Utilizamos o Serializable para conseguir utilizar a classe em trafego de dados.
@@ -20,6 +22,7 @@ public class Categoria implements Serializable{ // Utilizamos o Serializable par
 	private Integer id;
 	private String nome;
 	
+	@JsonManagedReference // Essa anotacao a gente coloca do lado que os objetos serão associados (guardados)
 	@ManyToMany (mappedBy="categorias") // Aqui tambem temos que colocar a relação e falar que ele ja foi mapeado através do atributo tal.
 	private List<Produto> produtos = new ArrayList<>();
 
