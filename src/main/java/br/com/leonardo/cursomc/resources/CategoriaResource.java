@@ -20,6 +20,8 @@ public class CategoriaResource{
 	@Autowired // Ja vimos a sua função no CategoriaService
 	private CategoriaService service;
 	
+
+	
 	
 	@RequestMapping(value="/{id}", method=RequestMethod.GET) //Esse segundo endpoint ficou definido que vai ser o algumacoisa/categoria/id para o get
 	public ResponseEntity<?> find(@PathVariable Integer id) { //Para que o Spring entenda que o id da URL vai ser o do parametro usamos a anotação @PathVariable

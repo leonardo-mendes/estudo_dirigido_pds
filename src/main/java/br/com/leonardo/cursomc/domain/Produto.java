@@ -8,38 +8,45 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 
-
 @Entity //Notação que faz essa classe ser criada no dB através do JPA Obs: Lembrar de criar a dependencia do mesmo no pom.xml
-public class Categoria implements Serializable{ // Utilizamos o Serializable para conseguir utilizar a classe em trafego de dados.
-	private static final long serialVersionUID = 1L; // Sempre é criado quando implementamos a Serializable
+public class Produto implements Serializable {
+	private static final long serialVersionUID = 1L;
 	
 	@Id //Essa notação indica que o campo abaixo "id" vai ser uma chave primária
 	@GeneratedValue(strategy=GenerationType.IDENTITY) //aqui definimos como vai funcionar a chave primária desta tabela
 	private Integer id;
 	private String nome;
+	private Double preco;
 	
-	@ManyToMany (mappedBy="categorias") // Aqui tambem temos que colocar a relação e falar que ele ja foi mapeado através do atributo tal.
-	private List<Produto> produtos = new ArrayList<>();
-
-	public Categoria() {
-		
-	}
-
-	public Categoria(Integer id, String nome) {
+	@ManyToMany // Essa notação fala sobre a associação que ele ira utilizar com a classe da lista abaixo
+	@JoinTable(name="PRODUTO_CATEGORIA", // Vai ser o nome da Tabela
+		joinColumns = @JoinColumn (name="produto_id"), // Aqui chamamos o join do produto com o nome da coluna no banco e abaixo a parte do categoria, ja que é uma relação * para *
+		inverseJoinColumns = @JoinColumn (name="categoria_id")
+    )
+	private List<Categoria> categorias = new ArrayList<>();
+	
+	public Produto(Integer id, String nome, Double preco) {
 		super();
 		this.id = id;
 		this.nome = nome;
+		this.preco = preco;
 	}
 	
-	
-	public List<Produto> getProdutos() {
-		return produtos;
+	public Produto() {
+
 	}
 
-	public void setProdutos(List<Produto> produtos) {
-		this.produtos = produtos;
+		
+	public List<Categoria> getCategorias() {
+		return categorias;
+	}
+
+	public void setCategorias(List<Categoria> categorias) {
+		this.categorias = categorias;
 	}
 
 	public Integer getId() {
@@ -58,12 +65,19 @@ public class Categoria implements Serializable{ // Utilizamos o Serializable par
 		this.nome = nome;
 	}
 
+	public Double getPreco() {
+		return preco;
+	}
+
+	public void setPreco(Double preco) {
+		this.preco = preco;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		result = prime * result + ((nome == null) ? 0 : nome.hashCode());
 		return result;
 	}
 
@@ -75,20 +89,16 @@ public class Categoria implements Serializable{ // Utilizamos o Serializable par
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Categoria other = (Categoria) obj;
+		Produto other = (Produto) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;
 		} else if (!id.equals(other.id))
 			return false;
-		if (nome == null) {
-			if (other.nome != null)
-				return false;
-		} else if (!nome.equals(other.nome))
-			return false;
 		return true;
 	}
-	
-	
 
+	
+	
+	
 }
