@@ -14,6 +14,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import br.com.leonardo.cursomc.domain.enums.TipoPessoa;
 
 @Entity
@@ -29,6 +31,7 @@ public class Cliente implements Serializable{
 	private String cpf;
 	private Integer tipopessoa; // O tipo de pessoa vai ser armazenado como um inteiro mas vai se expor como Tipo Pessoa
 	
+	@JsonManagedReference
 	@OneToMany (mappedBy="cliente")
 	private List<Endereco> enderecos = new ArrayList<>();
 	
