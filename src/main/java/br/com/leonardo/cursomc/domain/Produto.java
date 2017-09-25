@@ -16,6 +16,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity //Notação que faz essa classe ser criada no dB através do JPA Obs: Lembrar de criar a dependencia do mesmo no pom.xml
 public class Produto implements Serializable {
@@ -35,6 +36,7 @@ public class Produto implements Serializable {
     )
 	private List<Categoria> categorias = new ArrayList<>();
 	
+	@JsonIgnore // Para a gente não é interessate saber qual produto esa no item de pedido e sim qual é o produto do item
 	@OneToMany(mappedBy="id.produto") // A relação das classes primeiramene se da pelo id depois a classe associativa
 	private Set<ItemPedido> itens = new HashSet<>(); // Utilizamos o Set para garantir que não vai ter item repetido
 	
@@ -49,7 +51,8 @@ public class Produto implements Serializable {
 
 	}
 	
-	// Função criada para mostrar que a classe produto conhece aonde o produto foi usado
+	@JsonIgnore
+	// Se não ignorarmos vamos ter um referencia ciclica
 	public List<Pedido> getPedidos(){
 		List<Pedido> lista  = new ArrayList<>();
 		for (ItemPedido x : itens) {

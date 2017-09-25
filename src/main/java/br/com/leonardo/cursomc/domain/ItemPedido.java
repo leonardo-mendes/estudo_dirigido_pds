@@ -3,11 +3,14 @@ package br.com.leonardo.cursomc.domain;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class ItemPedido {
 
 	private static final long serialVersionUID = 1L;
 	
+	@JsonIgnore // Para não utilizamos como se fosse um chave simples, devido a isso não utilizamos @JsonReference e JsonBackReferenc
 	@EmbeddedId // Mostra que é um ID composto
 	private ItemPedidoPk id = new ItemPedidoPk(); // Esse id é um atributo composto
 	// Com isso as associacos dos pedidos foram feitas na classe ItemPedidoPk
@@ -31,7 +34,9 @@ public class ItemPedido {
 		this.preco = preco;
 	}
 	
-	// Criamos o get do Pedido e Produto para ter acesso direto as classes fora da classe ItemPedidoPk.
+	
+	// Criamos o get do Pedido e Produto para ter acesso direto as classes fora da classe ItemPedidoPk. porem no Json emos que ignorar pois tudo que começa com get o JPA entende que tem que serializar.
+	@JsonIgnore
 	public Pedido getPedido() {
 		return id.getPedido();
 	}
