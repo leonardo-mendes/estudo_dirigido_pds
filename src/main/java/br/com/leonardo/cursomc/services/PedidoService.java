@@ -13,7 +13,7 @@ public class PedidoService {
 	@Autowired // Essa anotação faz o atributo abaixo se auto iniciar automaticamente pelo Spring
 	private PedidoRepository repo; //Aqui temos qeu declarar uma depencia do PedidoRepository
 	
-	public Pedido buscar(Integer id) {
+	public Pedido find(Integer id) {
 		Pedido obj = repo.findOne(id); // Esse objeto criado ja utiliza os metodos criados na Classe JpaRepository que é implementada na PedidoRepository
 		// Esse metodo findOne quando não encontra o objeto retorna nulo
 		

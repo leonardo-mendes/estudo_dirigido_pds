@@ -13,7 +13,7 @@ public class ClienteService {
 	@Autowired // Essa anotação faz o atributo abaixo se auto iniciar automaticamente pelo Spring
 	private ClienteRepository repo; //Aqui temos qeu declarar uma depencia do ClienteRepository
 	
-	public Cliente buscar(Integer id) {
+	public Cliente find(Integer id) {
 		Cliente obj = repo.findOne(id); // Esse objeto criado ja utiliza os metodos criados na Classe JpaRepository que é implementada na ClienteRepository
 		// Esse metodo findOne quando não encontra o objeto retorna nulo
 		
