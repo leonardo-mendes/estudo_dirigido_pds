@@ -14,8 +14,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import br.com.leonardo.cursomc.domain.enums.TipoPessoa;
 
@@ -32,7 +31,6 @@ public class Cliente implements Serializable{
 	private String cpf;
 	private Integer tipopessoa; // O tipo de pessoa vai ser armazenado como um inteiro mas vai se expor como Tipo Pessoa
 	
-	@JsonManagedReference
 	@OneToMany (mappedBy="cliente")
 	private List<Endereco> enderecos = new ArrayList<>();
 	
@@ -43,7 +41,7 @@ public class Cliente implements Serializable{
 	//Iremos criar uma coleção: isso é vai ser um array de telefones que não irão se repetir
 	//O que garante a não repetição é o private Set
 	
-	@JsonBackReference
+	@JsonIgnore
 	@OneToMany (mappedBy="cliente")
 	private List<Pedido> pedidos = new ArrayList<>();
 
