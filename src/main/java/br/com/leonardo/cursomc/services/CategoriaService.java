@@ -1,13 +1,15 @@
 package br.com.leonardo.cursomc.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import br.com.leonardo.cursomc.domain.Categoria;
 import br.com.leonardo.cursomc.repositories.CategoriaRepository;
+import br.com.leonardo.cursomc.services.exceptions.DataIntegrityException;
 import br.com.leonardo.cursomc.services.exceptions.ObjectNotFoundException;
 
-@Service // A defini como serviço
+@Service // Essa notação define a classe como um Serviço
 public class CategoriaService {
 	
 	@Autowired // Essa anotação faz o atributo abaixo se auto iniciar automaticamente pelo Spring
@@ -33,8 +35,20 @@ public class CategoriaService {
 	
 	public Categoria update(Categoria obj) {
 		find(obj.getId()); // Utilizamos o primeiro metodo implementado para garantir que teremos um objeto com o ID
-		// Lembrando que esse metodo fiind() ja tem um tratamento de Exception
+		// Lembrando que esse metodo find() ja tem um tratamento de Exception
 		return repo.save(obj);
+	}
+	
+	public void delete(Integer id) {
+		find(id); // Utilizamos o primeiro metodo implementado para garantir que teremos um objeto com o ID
+		// Lembrando que esse metodo find() ja tem um tratamento de Exception
+		
+		try {
+			repo.delete(id);
+		}
+		catch(DataIntegrityViolationException e) { // Como falamos na Classe CategoriaResource temos que lançar essa exceção
+			throw new DataIntegrityException("Não é possivel excluir uma categoria que possui produtos."); // Usamos uma Exception que criamos para tratar com msg personalizada.
+		}
 	}
 
 }

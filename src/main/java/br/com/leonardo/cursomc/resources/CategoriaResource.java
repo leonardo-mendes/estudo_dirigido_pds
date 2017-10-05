@@ -20,10 +20,8 @@ public class CategoriaResource{
 	
 	@Autowired // Ja vimos a sua função no CategoriaService
 	private CategoriaService service;
-	
-
-	
-	
+		
+	// Buscar
 	@RequestMapping(value="/{id}", method=RequestMethod.GET) //Esse segundo endpoint ficou definido que vai ser o algumacoisa/categoria/id para o get
 	public ResponseEntity<Categoria> find(@PathVariable Integer id) { //Para que o Spring entenda que o id da URL vai ser o do parametro usamos a anotação @PathVariable
 	//	Utilizamos o ResponseEntity<?> pois ele ja tem alguns encapsulamentos importante para o Spring e utilizamos o ? porue não sabemos se vai retornar o resultado
@@ -34,7 +32,7 @@ public class CategoriaResource{
 		// Aqui estamos falando que o retorno vai ser .ok() e vai trazer o body(Com o objeto dentro);
 	}
 	
-	
+	// Inserir
 	@RequestMapping(method=RequestMethod.POST)
 	public ResponseEntity<Void> insert(@RequestBody Categoria obj){ // O RequestBody faz o JSON ser convertido em um objeto JAVA
 		// O codigo Http quando estamos inserindo um objeto no banco ele tem um codigo especifico que é 201
@@ -48,12 +46,26 @@ public class CategoriaResource{
 		return ResponseEntity.created(uri).build();
 	}
 	
-	
+	// Atualizar
 	@RequestMapping(value="/{id}", method=RequestMethod.PUT) // Esse metodo vai ser uma mistura dos dois metodos acima
 	public ResponseEntity<Void> update(@RequestBody Categoria obj, @PathVariable Integer id){
 		obj.setId(id); // Com isso garantimos que o Objeto passado vai ser o atualizado.
 		obj = service.update(obj);
 		return ResponseEntity.noContent().build(); // Não precisa de retorno
+	}
+	
+	// Deletar
+	@RequestMapping(value="/{id}", method=RequestMethod.DELETE) // Lembrando que em um DELETE sempre ira retornar o codigo 204 da Http
+	public ResponseEntity<Void> delete(@PathVariable Integer id) {
+		
+		// OBS IMPORTANTE: Quando vamos implementar o Delete, temos que verificar se existe algum objeto linkado a ele no DB
+		// Com isso temos poucas alternativas: ou continuamos o delete e apagamos todos objetos ou abortamos o delete
+		// No caso do Exercicio vamos abortar o DELETE, senão tratarmos retorna a Exception DataIntegrityViolationException()
+		
+		// Nese metodo não precisamos utilizar um try e catch, pois vamos tratar no na Exeception ResourceExceptionHandler
+		service.delete(id); // Metodo ja implemetado automaticamente.
+		
+		return ResponseEntity.noContent().build(); // Não precisa de retornoo build da URI
 	}
 	
 }
