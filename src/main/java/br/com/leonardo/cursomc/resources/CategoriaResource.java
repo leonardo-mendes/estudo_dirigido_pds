@@ -5,11 +5,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -81,6 +83,28 @@ public class CategoriaResource{
 		// eu estou criando o alias obj que ira realizar uma funcao anonima (->) que ira criar um CategoriaDTO com o obj como parametro
 		// apos isso temos que converter o stream para lista novamente entao utilizamos o collect(Collectors.toList())
 		List <CategoriaDTO> listDTO = list.stream().map(obj -> new CategoriaDTO(obj)).collect(Collectors.toList());
+		
+		return ResponseEntity.ok().body(listDTO);
+		// Aqui estamos falando que o retorno vai ser 	.ok() e vai trazer o body(Com a lista dentro);
+	}
+	
+	// Buscar todas Categorias com quatidades por paginas
+	@RequestMapping(value="/page", method=RequestMethod.GET) // Esse endpoint não precisa de ID ja que chamaremos todas categorias
+	public ResponseEntity<Page> findPage(
+			// Essa expressao @RequestParam(value="page", defaultValue="0") define a estrutura como um parametro e o torna um parametro opcional, pois se nao for preencido trata 0
+			@RequestParam(value="page", defaultValue="0") Integer page, 
+			// Nesse parametro abaixo que definimos como quantos objetos por pagina iremos retornar
+			@RequestParam(value="linesPerPage", defaultValue="24")Integer linesPerPage, 
+			@RequestParam(value="orderBy", defaultValue="nome")String orderBy, 
+			@RequestParam(value="linesPerPage", defaultValue="ASC")String direction) 
+	{ 
+		
+		Page<Categoria> list = service.findPages(page, linesPerPage, orderBy, direction);
+		
+		// Dessa maneira abaixo vamos percorrer a lista completa (stream) efetuando a operacao pra cada elemento da lista (map) e para cada objeto da lista
+		// eu estou criando o alias obj que ira realizar uma funcao anonima (->) que ira criar um CategoriaDTO com o obj como parametro
+		// apos isso temos que converter o stream para lista novamente entao utilizamos o collect(Collectors.toList())
+		Page <CategoriaDTO> listDTO = list.map(obj -> new CategoriaDTO(obj));
 		
 		return ResponseEntity.ok().body(listDTO);
 		// Aqui estamos falando que o retorno vai ser 	.ok() e vai trazer o body(Com a lista dentro);

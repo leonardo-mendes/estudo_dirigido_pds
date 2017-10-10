@@ -61,6 +61,12 @@ public class CursomcApplication  implements CommandLineRunner{ // A gente implem
 	public void run(String... arg0) throws Exception { // Metodo implementado para fazer o save de dados no banco ao iniciar
 		Categoria cat1 = new Categoria(null,"Informatica");
 		Categoria cat2 = new Categoria(null,"Escritorio");
+		Categoria cat3 = new Categoria(null,"Casa Mesa e Banho");
+		Categoria cat4 = new Categoria(null,"Eletronicos");
+		Categoria cat5 = new Categoria(null,"Jardinagem");
+		Categoria cat6 = new Categoria(null,"Decoracao");
+		Categoria cat7 = new Categoria(null,"Tabacaria");
+		Categoria cat8 = new Categoria(null,"Perfumaria");
 		
 		Produto p1 = new Produto(null,"Computador", 2000.00);
 		Produto p2 = new Produto(null,"Impressora", 800.00);
@@ -73,7 +79,7 @@ public class CursomcApplication  implements CommandLineRunner{ // A gente implem
 		p2.getCategorias().addAll(Arrays.asList(cat1,cat2));	
 		p3.getCategorias().addAll(Arrays.asList(cat1));	
 		
-		categoriarepository.save(Arrays.asList(cat1,cat2)); // Como criamos o objeto do repository aqui vamos utilizar um de seus metodos ja herdados da Jpa
+		categoriarepository.save(Arrays.asList(cat1,cat2,cat3,cat4,cat5,cat6,cat7,cat8)); // Como criamos o objeto do repository aqui vamos utilizar um de seus metodos ja herdados da Jpa
 		// Dentro do save utilizamos o Arrays.asList(cat1,cat2) que é um macete para salvar masi de um objeto ja no dB
 		
 		produtorepository.save(Arrays.asList(p1,p2,p3));
