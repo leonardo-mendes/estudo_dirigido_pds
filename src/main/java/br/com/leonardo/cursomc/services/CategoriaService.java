@@ -10,6 +10,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import br.com.leonardo.cursomc.domain.Categoria;
+import br.com.leonardo.cursomc.dto.CategoriaDTO;
 import br.com.leonardo.cursomc.repositories.CategoriaRepository;
 import br.com.leonardo.cursomc.services.exceptions.DataIntegrityException;
 import br.com.leonardo.cursomc.services.exceptions.ObjectNotFoundException;
@@ -67,6 +68,11 @@ public class CategoriaService {
 		
 		return repo.findAll(pageRequest);
 		
+	}
+	
+	// Como alteramos o metodo POST do Resource para trazer um objeto DTO por causa das validacoes temos que fazer essa conversao abaixo
+	public Categoria fromDTO(CategoriaDTO objDTO) {
+		return new Categoria(objDTO.getId(), objDTO.getNome());
 	}
 
 }

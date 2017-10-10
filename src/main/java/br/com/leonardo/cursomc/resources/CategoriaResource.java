@@ -4,6 +4,8 @@ import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -39,9 +41,12 @@ public class CategoriaResource{
 	
 	// Inserir
 	@RequestMapping(method=RequestMethod.POST)
-	public ResponseEntity<Void> insert(@RequestBody Categoria obj){ // O RequestBody faz o JSON ser convertido em um objeto JAVA
+	// Para que a validacao do DTO funcione temos que utilizar o @valid
+	public ResponseEntity<Void> insert(@Valid @RequestBody CategoriaDTO objDTO){ // O RequestBody faz o JSON ser convertido em um objeto JAVA
 		// O codigo Http quando estamos inserindo um objeto no banco ele tem um codigo especifico que é 201
-		// Sempre devemos  devolver o novo ID do objeto para a URI (endereço do novo objeto).
+		// Sempre devemos  devolver o novo ID do objeto para a URI (endereço do novo objeto)
+		
+		Categoria obj = service.fromDTO(objDTO);
 		obj = service.insert(obj);
 		
 		// Essa expressão abaixo é meio que um padrão do Java para devolver para o URI o valor do novo id
@@ -53,7 +58,9 @@ public class CategoriaResource{
 	
 	// Atualizar
 	@RequestMapping(value="/{id}", method=RequestMethod.PUT) // Esse metodo vai ser uma mistura dos dois metodos acima
-	public ResponseEntity<Void> update(@RequestBody Categoria obj, @PathVariable Integer id){
+	public ResponseEntity<Void> update(@Valid @RequestBody CategoriaDTO objDTO, @PathVariable Integer id){
+		
+		Categoria obj = service.fromDTO(objDTO);
 		obj.setId(id); // Com isso garantimos que o Objeto passado vai ser o atualizado.
 		obj = service.update(obj);
 		return ResponseEntity.noContent().build(); // Não precisa de retorno
