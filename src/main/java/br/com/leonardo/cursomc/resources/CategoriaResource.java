@@ -1,6 +1,8 @@
 package br.com.leonardo.cursomc.resources;
 
 import java.net.URI;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import br.com.leonardo.cursomc.domain.Categoria;
+import br.com.leonardo.cursomc.dto.CategoriaDTO;
 import br.com.leonardo.cursomc.services.CategoriaService;
 
 @RestController
@@ -66,6 +69,21 @@ public class CategoriaResource{
 		service.delete(id); // Metodo ja implemetado automaticamente.
 		
 		return ResponseEntity.noContent().build(); // Não precisa de retornoo build da URI
+	}
+	
+	// Buscar todas Categorias
+	@RequestMapping(method=RequestMethod.GET) // Esse endpoint não precisa de ID ja que chamaremos todas categorias
+	public ResponseEntity<List<CategoriaDTO>> findAll() { 
+		
+		List<Categoria> list = service.findAll();
+		
+		// Dessa maneira abaixo vamos percorrer a lista completa (stream) efetuando a operacao pra cada elemento da lista (map) e para cada objeto da lista
+		// eu estou criando o alias obj que ira realizar uma funcao anonima (->) que ira criar um CategoriaDTO com o obj como parametro
+		// apos isso temos que converter o stream para lista novamente entao utilizamos o collect(Collectors.toList())
+		List <CategoriaDTO> listDTO = list.stream().map(obj -> new CategoriaDTO(obj)).collect(Collectors.toList());
+		
+		return ResponseEntity.ok().body(listDTO);
+		// Aqui estamos falando que o retorno vai ser 	.ok() e vai trazer o body(Com a lista dentro);
 	}
 	
 }
