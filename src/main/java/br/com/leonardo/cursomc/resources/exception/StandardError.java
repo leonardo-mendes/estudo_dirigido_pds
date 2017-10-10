@@ -1,6 +1,10 @@
 package br.com.leonardo.cursomc.resources.exception;
 
-public class StandardError {
+import java.io.Serializable;
+
+public class StandardError implements Serializable{ // Utilizamos o Serializable para conseguir utilizar a classe em trafego de dados.
+	private static final long serialVersionUID = 1L; // Sempre é criado quando implementamos a Serializable
+	
 	private Integer status;
 	private String msg;
 	private Long timestamp;
