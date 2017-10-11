@@ -55,7 +55,8 @@ public class Cliente implements Serializable{
 		this.nome = nome;
 		this.email = email;
 		this.cpf = cpf;
-		this.tipopessoa = tipopessoa.getId(); // Como definimos como enum iremos chamar so o ID
+		// Foi necessário fazer a validação de Ternalio para garantir o funcionamento do ClienteDTO
+		this.tipopessoa = (tipopessoa == null) ? null: tipopessoa.getId(); // Como definimos como enum iremos chamar so o ID
 	}
 
 	public Integer getId() {
