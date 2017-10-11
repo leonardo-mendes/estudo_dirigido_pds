@@ -1,5 +1,6 @@
 package br.com.leonardo.cursomc.resources;
 
+import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -14,9 +15,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import br.com.leonardo.cursomc.domain.Categoria;
 import br.com.leonardo.cursomc.domain.Cliente;
+import br.com.leonardo.cursomc.dto.CategoriaDTO;
 import br.com.leonardo.cursomc.dto.ClienteDTO;
+import br.com.leonardo.cursomc.dto.ClienteNewDTO;
 import br.com.leonardo.cursomc.services.ClienteService;
 
 @RestController
@@ -37,6 +42,23 @@ public class ClienteResource{
 		// Aqui estamos falando que o retorno vai ser .ok() e vai trazer o body(Com o objeto dentro);
 	}
 	
+	
+	// Inserir
+	@RequestMapping(method=RequestMethod.POST)
+	// Para que a validacao do DTO funcione temos que utilizar o @valid
+	public ResponseEntity<Void> insert(@Valid @RequestBody ClienteNewDTO objDTO){ // O RequestBody faz o JSON ser convertido em um objeto JAVA
+		// O codigo Http quando estamos inserindo um objeto no banco ele tem um codigo especifico que é 201
+		// Sempre devemos  devolver o novo ID do objeto para a URI (endereço do novo objeto)
+		
+		Cliente obj = service.fromDTO(objDTO);
+		obj = service.insert(obj);
+		
+		// Essa expressão abaixo é meio que um padrão do Java para devolver para o URI o valor do novo id
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
+		
+		// Esse método abaixo ja faz toda a construção do build da URI
+		return ResponseEntity.created(uri).build();
+	}
 
 	// Atualizar
 	@RequestMapping(value="/{id}", method=RequestMethod.PUT) // Esse metodo vai ser uma mistura dos dois metodos acima

@@ -9,9 +9,15 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
+import br.com.leonardo.cursomc.domain.Cidade;
 import br.com.leonardo.cursomc.domain.Cliente;
+import br.com.leonardo.cursomc.domain.Endereco;
+import br.com.leonardo.cursomc.domain.enums.TipoPessoa;
 import br.com.leonardo.cursomc.dto.ClienteDTO;
+import br.com.leonardo.cursomc.dto.ClienteNewDTO;
+import br.com.leonardo.cursomc.repositories.CidadeRepository;
 import br.com.leonardo.cursomc.repositories.ClienteRepository;
+import br.com.leonardo.cursomc.repositories.EnderecoRepository;
 import br.com.leonardo.cursomc.services.exceptions.DataIntegrityException;
 import br.com.leonardo.cursomc.services.exceptions.ObjectNotFoundException;
 
@@ -20,6 +26,9 @@ public class ClienteService {
 	
 	@Autowired // Essa anotação faz o atributo abaixo se auto iniciar automaticamente pelo Spring
 	private ClienteRepository repo; //Aqui temos qeu declarar uma depencia do ClienteRepository
+	
+	private CidadeRepository cidaderepo;
+	private EnderecoRepository enderecorepo;
 	
 	public Cliente find(Integer id) {
 		Cliente obj = repo.findOne(id); // Esse objeto criado ja utiliza os metodos criados na Classe JpaRepository que é implementada na ClienteRepository
@@ -38,13 +47,18 @@ public class ClienteService {
 		newObj.setEmail(obj.getEmail());
 	}
 	
+	public Cliente insert(Cliente obj) {
+		obj.setId(null); // Com isso garantimos que o objeto novo sempre vai ter o ID nulo.
+		obj = repo.save(obj); 
+		enderecorepo.save(obj.getEnderecos());
+		return repo.save(obj); 
+	}
 	
-	// Atualizar
 	// Esse metodo é um pouco diferente de categoria pois  na classe cliente tem dados qu enão temos na clienteDTO, pois não é interessante la
 	public Cliente update(Cliente obj) {
 		Cliente newObj = find(obj.getId());
 		updateData (newObj, obj);
-		return repo.save(obj);
+		return obj;
 	}
 	
 	public void delete(Integer id) {
@@ -75,6 +89,22 @@ public class ClienteService {
 	// Como alteramos o metodo POST do Resource para trazer um objeto DTO por causa das validacoes temos que fazer essa conversao abaixo
 	public Cliente fromDTO(ClienteDTO objDTO) {
 		return new Cliente(objDTO.getId(), objDTO.getNome(), objDTO.getEmail(), null, null);
+	}
+	
+	// Como alteramos o metodo POST do Resource para trazer um objeto DTO por causa das validacoes temos que fazer essa conversao abaixo
+	public Cliente fromDTO(ClienteNewDTO objDTO) {
+		Cliente cli1 = new Cliente(null, objDTO.getNome(),objDTO.getEmail(), objDTO.getCpf(), TipoPessoa.toEnum(objDTO.getTipopessoa()));
+		Cidade cid = cidaderepo.findOne(objDTO.getCidadeId());
+		Endereco end = new Endereco(null, objDTO.getLogradouro(), objDTO.getNumero(), objDTO.getBairro(), objDTO.getCep(), objDTO.getComplemento(), cli1, cid);
+		cli1.getEnderecos().add(end);
+		cli1.getTelefones().add(objDTO.getTelefone1());
+		if(objDTO.getTelefone2()!=null) {
+			cli1.getTelefones().add(objDTO.getTelefone2());
+		}
+		if(objDTO.getTelefone3()!=null) {
+			cli1.getTelefones().add(objDTO.getTelefone3());
+		}
+		return cli1;
 	}
 	
 
