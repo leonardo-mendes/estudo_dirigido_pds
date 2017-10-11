@@ -32,7 +32,7 @@ public class ClienteService {
 		return obj;
 	}
 	
-	// Esse metodo foi criado posterior ao update pois ele que realizara o update doa dados no dB
+	// Esse metodo foi criado posterior ao update pois ele que realizara o update dos dados no dB
 	private void updateData(Cliente newObj, Cliente obj) {
 		newObj.setNome(obj.getNome());
 		newObj.setEmail(obj.getEmail());

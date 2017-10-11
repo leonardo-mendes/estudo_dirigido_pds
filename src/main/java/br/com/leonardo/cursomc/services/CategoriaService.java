@@ -39,9 +39,14 @@ public class CategoriaService {
 	
 	// O método acima e abaixo são bem parecidos, pois o metodo save() faz o update quando acha o ID e Insert quando não acha
 	
+	// Esse metodo foi criado posterior ao update pois ele que realizara o update dos dados no dB
+	private void updateData(Categoria newObj, Categoria obj) {
+		newObj.setNome(obj.getNome());
+	}
+	
 	public Categoria update(Categoria obj) {
-		find(obj.getId()); // Utilizamos o primeiro metodo implementado para garantir que teremos um objeto com o ID
-		// Lembrando que esse metodo find() ja tem um tratamento de Exception
+		Categoria newObj = find(obj.getId());
+		updateData (newObj, obj);
 		return repo.save(obj);
 	}
 	
