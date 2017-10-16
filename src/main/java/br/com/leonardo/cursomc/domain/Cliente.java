@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
@@ -31,7 +32,7 @@ public class Cliente implements Serializable{
 	private String cpf;
 	private Integer tipopessoa; // O tipo de pessoa vai ser armazenado como um inteiro mas vai se expor como Tipo Pessoa
 	
-	@OneToMany (mappedBy="cliente")
+	@OneToMany (mappedBy="cliente", cascade=CascadeType.ALL) // Essa notação cascade fala que toda ação que eu fizer no cliente pode influenciar o Endereço, isso ocorre pela associção 1 para muitos
 	private List<Endereco> enderecos = new ArrayList<>();
 	
 	@ElementCollection // Situacao pontual para Collections
