@@ -1,0 +1,47 @@
+package br.com.leonardo.cursomc.services.validation;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.validation.ConstraintValidator;
+import javax.validation.ConstraintValidatorContext;
+
+import br.com.leonardo.cursomc.domain.enums.TipoPessoa;
+import br.com.leonardo.cursomc.dto.ClienteNewDTO;
+import br.com.leonardo.cursomc.resources.exception.FieldMessage;
+import br.com.leonardo.cursomc.services.validation.utils.BR;
+
+public class ClienteInsertValidator implements ConstraintValidator<ClienteInsert, ClienteNewDTO> {
+
+	@Override
+	public void initialize(ClienteInsert ann) {
+		
+	}
+	
+	@Override // Esse metodo que é construido para nos realizarmos qualquer validação personalizada, com isso a notação @valid vai utilizar essa regra.
+	public boolean isValid(ClienteNewDTO obj, ConstraintValidatorContext context) {
+		
+		// FieldMessage nos ja criamos e ela trata os erros que vamos simular abaixo.
+		List<FieldMessage> list = new ArrayList<>();
+		
+		// Os dois IF's abaixo servem somente para validar o CPF/CNPJ e se ocorrer erro iremos adicionar na Lista.
+		if(obj.getTipopessoa().equals(TipoPessoa.PESSOAFISICA.getId()) && !BR.isValidCPF(obj.getCpf())) {
+			list.add(new FieldMessage("CPFouCNPJ", "CPF é inválido"));
+		}
+		
+		if(obj.getTipopessoa().equals(TipoPessoa.PESSOAJURIDICA.getId()) && !BR.isValidCNPJ(obj.getCpf())) {
+			list.add(new FieldMessage("CPFouCNPJ", "CNPJ é inválido"));
+		}
+		
+		// Esse for abaixo não precisamos aprender, pois é modelo para o JPA o que ele faz? Ele pega cada posição da lista criada acima e adciona colocando a msg do erro e o tipo do erro que é tratado ResourceExceptionHandler
+		for(FieldMessage e: list) {
+			context.disableDefaultConstraintViolation();
+			context.buildConstraintViolationWithTemplate(e.getMessage()).addPropertyNode(e.getMessage()).addConstraintViolation();
+		}
+		return list.isEmpty();
+		
+	}
+	
+	
+	
+}

@@ -2,26 +2,53 @@ package br.com.leonardo.cursomc.dto;
 
 import java.io.Serializable;
 
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotEmpty;
+
+import br.com.leonardo.cursomc.services.validation.ClienteInsert;
+
 // Essa classe é criada para fazer um controle, pois na inha regra de negocio o Cliente so pode ser cadastrado se:
 // - Tiver um Endereço (Lembrando que por associação o Endereço exigi uma Cidade)
 // - Tiver Um Telefone (Por opção o Cliente pode ter até 3 telefones)
+
+@ClienteInsert
 public class ClienteNewDTO implements Serializable{
 
 	private static final long serialVersionUID = 1L;
-	
+		
+	@NotEmpty(message="Preencimento Obrigatorio") // Valida se esta vazio
+	@Length(min=5, max=80, message="O tamanho deve ser de 5 a 80 caracteres") // Validacao do tamanho do campo
 	private String nome;
+	
+	@NotEmpty (message="Preencimento Obrigatorio") // Valida se esta vazio
+	@Email (message="Email inválido")
 	private String email;
+	
+	@NotEmpty(message="Preencimento Obrigatorio") // Valida se esta vazio
 	private String cpf;
+	
 	private Integer tipopessoa;
 	
+	@NotEmpty(message="Preencimento Obrigatorio") // Valida se esta vazio
 	private String logradouro;
+	
+	@NotEmpty(message="Preencimento Obrigatorio") // Valida se esta vazio
 	private String numero;
+	
 	private String bairro;
+	
+	@NotEmpty(message="Preencimento Obrigatorio") // Valida se esta vazio
 	private String cep;
+	
+	
 	private String complemento;
 	
+	@NotEmpty(message="Preencimento Obrigatorio") // Valida se esta vazio
 	private String telefone1;
+	
 	private String telefone2;
+	
 	private String telefone3;
 	
 	private Integer cidadeId;
