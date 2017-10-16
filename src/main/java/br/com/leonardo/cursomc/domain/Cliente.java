@@ -8,6 +8,7 @@ import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
+import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -28,6 +29,8 @@ public class Cliente implements Serializable{
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id;
 	private String nome;
+	
+	@Column(unique=true) // Isso garante que não teremos valores igual, ou seja dois emails iguais, porem quando usamos assim é lançado uma exceção muito estranha para o Usuario, por isso devemos tratar-la
 	private String email;
 	private String cpf;
 	private Integer tipopessoa; // O tipo de pessoa vai ser armazenado como um inteiro mas vai se expor como Tipo Pessoa
