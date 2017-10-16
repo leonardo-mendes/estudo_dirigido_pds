@@ -7,7 +7,9 @@ import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import br.com.leonardo.cursomc.domain.Cliente;
+import br.com.leonardo.cursomc.services.validation.ClienteUpdate;
 
+@ClienteUpdate
 public class ClienteDTO implements Serializable{ // Utilizamos o Serializable para conseguir utilizar a classe em trafego de dados.
 	private static final long serialVersionUID = 1L; // Sempre é criado quando implementamos a Serializable
 	
