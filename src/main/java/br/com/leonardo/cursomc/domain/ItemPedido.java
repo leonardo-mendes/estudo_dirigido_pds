@@ -35,6 +35,10 @@ public class ItemPedido {
 	}
 	
 	
+	public Double getSubtotal() {
+		return (preco-desconto) * qtd;
+	}	
+	
 	// Criamos o get do Pedido e Produto para ter acesso direto as classes fora da classe ItemPedidoPk. porem no Json emos que ignorar pois tudo que começa com get o JPA entende que tem que serializar.
 	@JsonIgnore
 	public Pedido getPedido() {
