@@ -11,6 +11,7 @@ import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 import br.com.leonardo.cursomc.domain.enums.EstadoPagamento;
 
@@ -19,6 +20,8 @@ import br.com.leonardo.cursomc.domain.enums.EstadoPagamento;
 // Quando fazemos herança podemos:
 // 1 - Geramos uma super tabela com todos as colunas da herança com valores nulos ou não  (Single_Table)
 // 2 - Geramos uma tabela para cada subclasse (Joined)
+
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "@type")
 public abstract class Pagamento implements Serializable{ // Lembrando que o abstract vc não deixa criar um obejt pagamento
 
 	private static final long serialVersionUID = 1L;
