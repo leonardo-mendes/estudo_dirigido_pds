@@ -1,5 +1,8 @@
 package br.com.leonardo.cursomc.domain;
 
+import java.text.NumberFormat;
+import java.util.Locale;
+
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 
@@ -8,7 +11,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Entity
 public class ItemPedido {
 
-	private static final long serialVersionUID = 1L;
 	
 	@JsonIgnore // Para não utilizamos como se fosse um chave simples, devido a isso não utilizamos @JsonReference e JsonBackReferenc
 	@EmbeddedId // Mostra que é um ID composto
@@ -114,6 +116,24 @@ public class ItemPedido {
 			return false;
 		return true;
 	}
+
+	// Foi criado esse método com StringBuilder para o envio de email
+	@Override
+	public String toString() {
+		NumberFormat nf = NumberFormat.getCurrencyInstance(new Locale("pt","BR"));
+		StringBuilder builder = new StringBuilder();
+		builder.append(getProduto().getNome());
+		builder.append(" , Qtd: ");
+		builder.append(getQtd());
+		builder.append(" , Preço Unitário: ");
+		builder.append(nf.format(getPreco()));
+		builder.append(" , Subtotal: ");
+		builder.append(nf.format(getSubtotal()));
+		builder.append("\n");
+		return builder.toString();
+	}
+	
+	
 	
 	
 

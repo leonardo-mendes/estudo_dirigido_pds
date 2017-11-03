@@ -9,6 +9,7 @@ import br.com.leonardo.cursomc.domain.ItemPedido;
 import br.com.leonardo.cursomc.domain.PagamentoBoleto;
 import br.com.leonardo.cursomc.domain.Pedido;
 import br.com.leonardo.cursomc.domain.enums.EstadoPagamento;
+import br.com.leonardo.cursomc.repositories.ClienteRepository;
 import br.com.leonardo.cursomc.repositories.ItemPedidoRepository;
 import br.com.leonardo.cursomc.repositories.PagamentoRepository;
 import br.com.leonardo.cursomc.repositories.PedidoRepository;
@@ -32,6 +33,9 @@ public class PedidoService {
 	
 	@Autowired // Essa anotação faz o atributo abaixo se auto iniciar automaticamente pelo Spring
 	private ItemPedidoRepository itempedidorepo; //Aqui temos qeu declarar uma depencia do PedidoRepository
+	
+	@Autowired // Essa anotação faz o atributo abaixo se auto iniciar automaticamente pelo Spring
+	private ClienteRepository clienterepo; //Aqui temos qeu declarar uma depencia do PedidoRepository
 
 	public Pedido find(Integer id) {
 		Pedido obj = repo.findOne(id); // Esse objeto criado ja utiliza os metodos criados na Classe JpaRepository que é implementada na PedidoRepository
@@ -48,6 +52,7 @@ public class PedidoService {
 	public Pedido insert(Pedido obj) {
 		obj.setId(null);
 		obj.setInstante(new Date()); //Cria uma nova data do sistema no momento
+		obj.setCliente(clienterepo.findOne(obj.getCliente().getId()));
 		obj.getPagamento().setEstado(EstadoPagamento.PENDENTE);
 		obj.getPagamento().setPedido(obj);
 		
@@ -61,6 +66,7 @@ public class PedidoService {
 		
 		for(ItemPedido ip : obj.getItens()) {
 			ip.setDesconto(0.0);
+			ip.setProduto(produtorepo.findOne(ip.getProduto().getId()));
 			ip.setPreco(produtorepo.findOne(ip.getProduto().getId()).getPreco());
 			ip.setPedido(obj);
 		}
