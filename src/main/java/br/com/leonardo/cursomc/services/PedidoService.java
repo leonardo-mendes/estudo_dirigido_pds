@@ -36,6 +36,9 @@ public class PedidoService {
 	
 	@Autowired // Essa anotação faz o atributo abaixo se auto iniciar automaticamente pelo Spring
 	private ClienteRepository clienterepo; //Aqui temos qeu declarar uma depencia do PedidoRepository
+	
+	@Autowired // Essa anotação faz o atributo abaixo se auto iniciar automaticamente pelo Spring
+	private EmailService emailservice; //Aqui temos qeu declarar uma depencia do PedidoRepository
 
 	public Pedido find(Integer id) {
 		Pedido obj = repo.findOne(id); // Esse objeto criado ja utiliza os metodos criados na Classe JpaRepository que é implementada na PedidoRepository
@@ -72,6 +75,9 @@ public class PedidoService {
 		}
 		
 		itempedidorepo.save(obj.getItens());
+		
+		// Aqui enviamos o email
+		emailservice.sendOrderConfirmationEmail(obj);		
 		
 		return obj;
 	}

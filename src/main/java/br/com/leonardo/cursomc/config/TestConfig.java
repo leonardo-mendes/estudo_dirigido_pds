@@ -8,6 +8,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 import br.com.leonardo.cursomc.services.DBService;
+import br.com.leonardo.cursomc.services.EmailService;
+import br.com.leonardo.cursomc.services.MockEmailService;
 
 @Configuration
 @Profile("test") // Com essa notação eu falo que todos os bins presentes aqui estão ativos quando no meu application.proprieis estiver com o test active
@@ -22,4 +24,8 @@ public class TestConfig {
 		return true;
 	}
 
+	@Bean
+	public EmailService emailService() {
+		return new MockEmailService();
+	}
 }
