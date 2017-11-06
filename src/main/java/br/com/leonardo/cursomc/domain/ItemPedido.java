@@ -11,6 +11,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Entity
 public class ItemPedido {
 
+	private static final long serialVersionUID = 1L;
 	
 	@JsonIgnore // Para não utilizamos como se fosse um chave simples, devido a isso não utilizamos @JsonReference e JsonBackReferenc
 	@EmbeddedId // Mostra que é um ID composto

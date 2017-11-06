@@ -9,6 +9,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 import br.com.leonardo.cursomc.services.DBService;
+import br.com.leonardo.cursomc.services.EmailService;
+import br.com.leonardo.cursomc.services.SmtpEmailService;
 
 @Configuration
 @Profile("dev") // Com essa notação eu falo que todos os bins presentes aqui estão ativos quando no meu application.proprieis estiver com o test active
@@ -29,6 +31,12 @@ public class DevConfig {
 		
 		dbtest.instantiateTestDataBase();		
 		return true;
+	}
+	
+	// Esse Bean serve para avisar a aplicação que quando ela necessitar de um EmailService ela vai retornar um SmtpEmailService
+	@Bean
+	public EmailService emailService() {
+		return new SmtpEmailService();
 	}
 
 }

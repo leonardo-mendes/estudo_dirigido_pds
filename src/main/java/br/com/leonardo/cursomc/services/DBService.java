@@ -113,7 +113,7 @@ public class DBService { // Essa classe é criada somente para instanciar o serv
 		estadorepository.save(Arrays.asList(est1,est2));
 		cidaderepository.save(Arrays.asList(c1,c2,c3));
 		
-		Cliente cli1 = new Cliente(null, "Maria Silva", "maria@hotmail.com", "1234567", TipoPessoa.PESSOAFISICA);
+		Cliente cli1 = new Cliente(null, "Maria Silva", "leonardo@webmendes.com", "1234567", TipoPessoa.PESSOAFISICA);
 		cli1.getTelefones().addAll(Arrays.asList("123456789","987654321"));
 		
 		Endereco e1 = new Endereco(null, "Rua Flores", "300", "Jardim", "123465789", "Apto03", cli1, c1);
