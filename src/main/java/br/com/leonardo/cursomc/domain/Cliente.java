@@ -48,12 +48,15 @@ public class Cliente implements Serializable{
 	@JsonIgnore
 	@OneToMany (mappedBy="cliente")
 	private List<Pedido> pedidos = new ArrayList<>();
+	
+	@JsonIgnore // Para não mostrar a senha no JSON
+	private String senha;
 
 	public Cliente() {
 		
 	}
 	
-	public Cliente(Integer id, String nome, String email, String cpf, TipoPessoa tipopessoa) {
+	public Cliente(Integer id, String nome, String email, String cpf, TipoPessoa tipopessoa, String senha) {
 		super();
 		this.id = id;
 		this.nome = nome;
@@ -61,6 +64,7 @@ public class Cliente implements Serializable{
 		this.cpf = cpf;
 		// Foi necessário fazer a validação de Ternalio para garantir o funcionamento do ClienteDTO
 		this.tipopessoa = (tipopessoa == null) ? null: tipopessoa.getId(); // Como definimos como enum iremos chamar so o ID
+		this.senha = senha;
 	}
 
 	public Integer getId() {
@@ -118,6 +122,15 @@ public class Cliente implements Serializable{
 	public void setTelefones(Set<String> telefones) {
 		this.telefones = telefones;
 	}
+	
+	public String getSenha() {
+		return senha;
+	}
+
+	public void setSenha(String senha) {
+		this.senha=senha;
+	}
+	
 
 	@Override
 	public int hashCode() {

@@ -7,6 +7,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import br.com.leonardo.cursomc.domain.Cidade;
@@ -26,6 +27,9 @@ public class ClienteService {
 	
 	@Autowired // Essa anotação faz o atributo abaixo se auto iniciar automaticamente pelo Spring
 	private ClienteRepository repo; //Aqui temos qeu declarar uma depencia do ClienteRepository
+	
+	@Autowired
+	private BCryptPasswordEncoder passwordenc;
 	
 	private CidadeRepository cidaderepo;
 	private EnderecoRepository enderecorepo;
@@ -88,12 +92,12 @@ public class ClienteService {
 	
 	// Como alteramos o metodo POST do Resource para trazer um objeto DTO por causa das validacoes temos que fazer essa conversao abaixo
 	public Cliente fromDTO(ClienteDTO objDTO) {
-		return new Cliente(objDTO.getId(), objDTO.getNome(), objDTO.getEmail(), null, null);
+		return new Cliente(objDTO.getId(), objDTO.getNome(), objDTO.getEmail(), null, null, null);
 	}
 	
 	// Como alteramos o metodo POST do Resource para trazer um objeto DTO por causa das validacoes temos que fazer essa conversao abaixo
 	public Cliente fromDTO(ClienteNewDTO objDTO) {
-		Cliente cli1 = new Cliente(null, objDTO.getNome(),objDTO.getEmail(), objDTO.getCpf(), TipoPessoa.toEnum(objDTO.getTipopessoa()));
+		Cliente cli1 = new Cliente(null, objDTO.getNome(),objDTO.getEmail(), objDTO.getCpf(), TipoPessoa.toEnum(objDTO.getTipopessoa()), passwordenc.encode(objDTO.getSenha()));
 		Cidade cid = cidaderepo.findOne(objDTO.getCidadeId());
 		Endereco end = new Endereco(null, objDTO.getLogradouro(), objDTO.getNumero(), objDTO.getBairro(), objDTO.getCep(), objDTO.getComplemento(), cli1, cid);
 		cli1.getEnderecos().add(end);
