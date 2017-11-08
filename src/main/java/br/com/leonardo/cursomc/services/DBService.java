@@ -20,6 +20,7 @@ import br.com.leonardo.cursomc.domain.PagamentoCartao;
 import br.com.leonardo.cursomc.domain.Pedido;
 import br.com.leonardo.cursomc.domain.Produto;
 import br.com.leonardo.cursomc.domain.enums.EstadoPagamento;
+import br.com.leonardo.cursomc.domain.enums.Perfil;
 import br.com.leonardo.cursomc.domain.enums.TipoPessoa;
 import br.com.leonardo.cursomc.repositories.CategoriaRepository;
 import br.com.leonardo.cursomc.repositories.CidadeRepository;
@@ -116,13 +117,19 @@ public class DBService { // Essa classe é criada somente para instanciar o serv
 		estadorepository.save(Arrays.asList(est1,est2));
 		cidaderepository.save(Arrays.asList(c1,c2,c3));
 		
-		Cliente cli1 = new Cliente(null, "Maria Silva", "leonardo@webmendes.com", "1234567", TipoPessoa.PESSOAFISICA, passwordenc.encode("123"));
+		Cliente cli1 = new Cliente(null, "Maria Silva", "leonardo@webmendes.com", "53756673200", TipoPessoa.PESSOAFISICA, passwordenc.encode("123"));
 		cli1.getTelefones().addAll(Arrays.asList("123456789","987654321"));
+		
+		Cliente cli2 = new Cliente(null, "Leonardo Mendes", "leonardocm92@hotmail.com", "67728188224", TipoPessoa.PESSOAFISICA, passwordenc.encode("456"));
+		cli2.addPerfil(Perfil.ADMIN);
+		cli2.getTelefones().addAll(Arrays.asList("123456789","987654321"));
 		
 		Endereco e1 = new Endereco(null, "Rua Flores", "300", "Jardim", "123465789", "Apto03", cli1, c1);
 		Endereco e2 = new Endereco(null, "Rua Rosas", "500", "Jardim 2", "987654321", "Fundos", cli1, c2);
+		Endereco e3 = new Endereco(null, "Rua Orquideas", "550", "Jardim 3", "987654321", "Fundos", cli2, c2);
 		
 		cli1.getEnderecos().addAll(Arrays.asList(e1,e2));
+		cli2.getEnderecos().addAll(Arrays.asList(e3));
 		
 		clienterepository.save(Arrays.asList(cli1));
 		enderecorepository.save(Arrays.asList(e1,e2));
