@@ -5,11 +5,13 @@ import java.net.URI;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -51,6 +53,23 @@ public class PedidoResource{
 		
 		// Esse método abaixo ja faz toda a construção do build da URI
 		return ResponseEntity.created(uri).build();
+	}
+	
+	
+	// Buscar todos os pedidos que pertence ao cliente
+	@RequestMapping(method=RequestMethod.GET) // Esse endpoint não precisa de ID ja que chamaremos todas categorias
+	public ResponseEntity<Page<Pedido>> findPage(
+			// Essa expressao @RequestParam(value="page", defaultValue="0") define a estrutura como um parametro e o torna um parametro opcional, pois se nao for preencido trata 0
+			@RequestParam(value="page", defaultValue="0") Integer page, 
+			// Nesse parametro abaixo que definimos como quantos objetos por pagina iremos retornar
+			@RequestParam(value="linesPerPage", defaultValue="24")Integer linesPerPage, 
+			@RequestParam(value="orderBy", defaultValue="instante")String orderBy, 
+			@RequestParam(value="linesPerPage", defaultValue="DESC")String direction) 
+	{ 
+		
+		Page<Pedido> list = service.findPages(page, linesPerPage, orderBy, direction);
+		
+		return ResponseEntity.ok().body(list);
 	}
 	
 }

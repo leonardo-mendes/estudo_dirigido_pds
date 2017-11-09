@@ -3,8 +3,12 @@ package br.com.leonardo.cursomc.services;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
+import br.com.leonardo.cursomc.domain.Cliente;
 import br.com.leonardo.cursomc.domain.ItemPedido;
 import br.com.leonardo.cursomc.domain.PagamentoBoleto;
 import br.com.leonardo.cursomc.domain.Pedido;
@@ -14,6 +18,8 @@ import br.com.leonardo.cursomc.repositories.ItemPedidoRepository;
 import br.com.leonardo.cursomc.repositories.PagamentoRepository;
 import br.com.leonardo.cursomc.repositories.PedidoRepository;
 import br.com.leonardo.cursomc.repositories.ProdutoRepository;
+import br.com.leonardo.cursomc.security.UserSS;
+import br.com.leonardo.cursomc.services.exceptions.AuthorizationException;
 import br.com.leonardo.cursomc.services.exceptions.ObjectNotFoundException;
 
 @Service // A defini como serviço
@@ -81,4 +87,15 @@ public class PedidoService {
 		
 		return obj;
 	}
+	
+	public Page<Pedido> findPages(Integer page, Integer linesPerPage, String orderBy, String direction){
+		UserSS user = UserService.authenticated(); // Vou capturar o Id do cliente verifcando se ele esta autenticado.
+		if(user == null) {
+			throw new AuthorizationException("Acesso Negado");
+		}
+		PageRequest pageRequest = new PageRequest(page, linesPerPage, Direction.valueOf(direction), orderBy);
+		Cliente cliente = clienterepo.findOne(user.getId());
+		return repo.findByCliente(cliente, pageRequest);		
+	}
+	
 }
