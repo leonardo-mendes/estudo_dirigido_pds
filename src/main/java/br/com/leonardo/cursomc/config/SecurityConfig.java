@@ -52,7 +52,8 @@ public class SecurityConfig extends  WebSecurityConfigurerAdapter{
 	
 	// Criamos um vetor de string para colocar todos os caminhos da URL que serão livres para acesso para insert.
 		private static final String[] PUBLIC_MATCHERS_POST = {
-				"/clientes/**"
+				"/clientes/**",
+				"/auth/forgot**"
 	    };
 	
 	@Override // Vamos sobreescrever esse metódo com o parametro padrão do Spring
