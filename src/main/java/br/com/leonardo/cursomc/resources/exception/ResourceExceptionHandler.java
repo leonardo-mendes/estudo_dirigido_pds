@@ -9,6 +9,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import br.com.leonardo.cursomc.services.exceptions.AuthorizationException;
 import br.com.leonardo.cursomc.services.exceptions.DataIntegrityException;
 import br.com.leonardo.cursomc.services.exceptions.ObjectNotFoundException;
 
@@ -44,5 +45,13 @@ public class ResourceExceptionHandler {
 		
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
 	}	
+	
+	@ExceptionHandler(AuthorizationException.class)
+	public ResponseEntity<StandardError> authorization(AuthorizationException e, HttpServletRequest request){
+		
+		// Aqui temos que tratar uma outra exception do Http, no caso do delete iremos utilizar o BAR_REQUEST
+		StandardError error = new StandardError(HttpStatus.FORBIDDEN.value(), e.getMessage(), System.currentTimeMillis());
+		return ResponseEntity.status(HttpStatus.FORBIDDEN).body(error);
+	}
 	
 }

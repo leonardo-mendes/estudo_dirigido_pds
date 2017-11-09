@@ -13,12 +13,15 @@ import org.springframework.stereotype.Service;
 import br.com.leonardo.cursomc.domain.Cidade;
 import br.com.leonardo.cursomc.domain.Cliente;
 import br.com.leonardo.cursomc.domain.Endereco;
+import br.com.leonardo.cursomc.domain.enums.Perfil;
 import br.com.leonardo.cursomc.domain.enums.TipoPessoa;
 import br.com.leonardo.cursomc.dto.ClienteDTO;
 import br.com.leonardo.cursomc.dto.ClienteNewDTO;
 import br.com.leonardo.cursomc.repositories.CidadeRepository;
 import br.com.leonardo.cursomc.repositories.ClienteRepository;
 import br.com.leonardo.cursomc.repositories.EnderecoRepository;
+import br.com.leonardo.cursomc.security.UserSS;
+import br.com.leonardo.cursomc.services.exceptions.AuthorizationException;
 import br.com.leonardo.cursomc.services.exceptions.DataIntegrityException;
 import br.com.leonardo.cursomc.services.exceptions.ObjectNotFoundException;
 
@@ -34,7 +37,15 @@ public class ClienteService {
 	private CidadeRepository cidaderepo;
 	private EnderecoRepository enderecorepo;
 	
+	
+	
 	public Cliente find(Integer id) {
+		// Vamos buscar o usuário logado
+		UserSS user = UserService.authenticated();
+		if(user == null || !user.hasRole(Perfil.ADMIN) && !id.equals(user.getId())) {
+			throw new AuthorizationException("Acesso Negado");
+		}
+		
 		Cliente obj = repo.findOne(id); // Esse objeto criado ja utiliza os metodos criados na Classe JpaRepository que é implementada na ClienteRepository
 		// Esse metodo findOne quando não encontra o objeto retorna nulo
 		
