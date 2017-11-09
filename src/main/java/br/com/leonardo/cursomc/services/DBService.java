@@ -131,7 +131,7 @@ public class DBService { // Essa classe é criada somente para instanciar o serv
 		cli1.getEnderecos().addAll(Arrays.asList(e1,e2));
 		cli2.getEnderecos().addAll(Arrays.asList(e3));
 		
-		clienterepository.save(Arrays.asList(cli1));
+		clienterepository.save(Arrays.asList(cli1,cli2));
 		enderecorepository.save(Arrays.asList(e1,e2));
 		
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy hh:mm"); // Classe que ira formatar a data

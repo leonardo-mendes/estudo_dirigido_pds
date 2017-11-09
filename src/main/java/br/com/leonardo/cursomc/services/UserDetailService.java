@@ -25,7 +25,7 @@ public class UserDetailService implements UserDetailsService{
 			throw new UsernameNotFoundException(email); // Essa exceção é exclusiva do Security
 		}
 
-		return new UserSS(cliente.getId(),cliente.getEmail(),cliente.getSenha(),cliente.getPerfis());
+		return new UserSS(cliente.getId(),cliente.getSenha(),cliente.getEmail(),cliente.getPerfis());
 	}
 
 }
