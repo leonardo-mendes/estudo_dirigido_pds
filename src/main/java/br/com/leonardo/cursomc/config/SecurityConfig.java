@@ -7,14 +7,19 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import br.com.leonardo.cursomc.security.JWTAuthenticationFilter;
+import br.com.leonardo.cursomc.security.JWTUtil;
 
 /*Como configuramos o pom.xml com o Security o spring ja bloqueou todos os nossos endpoints então teremos que configura-lo para funcionar corretamente*/
 
@@ -24,6 +29,12 @@ public class SecurityConfig extends  WebSecurityConfigurerAdapter{
 	
 	@Autowired
 	private Environment env;
+	
+	@Autowired
+	private UserDetailsService userDetailsService;
+	
+	@Autowired
+	private JWTUtil jwtUtil;
 	
 	// Criamos um vetor de string para colocar todos os caminhos da URL que serão livres para acesso.
 	private static final String[] PUBLIC_MATCHERS = {
@@ -53,6 +64,7 @@ public class SecurityConfig extends  WebSecurityConfigurerAdapter{
 			.permitAll()
 			.anyRequest()
 			.authenticated();
+		http.addFilter(new JWTAuthenticationFilter(authenticationManager(), jwtUtil));
 		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 	}
 	
@@ -67,6 +79,12 @@ public class SecurityConfig extends  WebSecurityConfigurerAdapter{
 	@Bean
 	public BCryptPasswordEncoder bCryptPasswordEncoder() {
 		return new BCryptPasswordEncoder();
+	}
+	
+	// Essa sobrecarga ocorre porque nos vamos utilizar a autenticação do framework, então temos que passar para ele quem é o UserDetail utilizado e qual sera a decodificação.
+	@Override
+	protected void configure(AuthenticationManagerBuilder auth) throws Exception{
+		auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder());
 	}
 
 }
