@@ -19,6 +19,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import br.com.leonardo.cursomc.security.JWTAuthenticationFilter;
+import br.com.leonardo.cursomc.security.JWTAuthorizationFilter;
 import br.com.leonardo.cursomc.security.JWTUtil;
 
 /*Como configuramos o pom.xml com o Security o spring ja bloqueou todos os nossos endpoints então teremos que configura-lo para funcionar corretamente*/
@@ -65,6 +66,7 @@ public class SecurityConfig extends  WebSecurityConfigurerAdapter{
 			.anyRequest()
 			.authenticated();
 		http.addFilter(new JWTAuthenticationFilter(authenticationManager(), jwtUtil));
+		http.addFilter(new JWTAuthorizationFilter(authenticationManager(), jwtUtil, userDetailsService));
 		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 	}
 	
